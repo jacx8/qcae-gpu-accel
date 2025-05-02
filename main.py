@@ -30,7 +30,7 @@ def main():
     args = parser.parse_args()
     
 
-    train_loader = train_dataset(n_samples=200)
+    train_loader = train_dataset(n_samples=10)
     test_loader = test_dataset(n_samples=10)
 
     if not args.test:
@@ -42,7 +42,7 @@ def main():
         optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
         # number of epochs to train the model
-        n_epochs = 50
+        n_epochs = 300
 
         losses = []
         psnrs = []
@@ -149,15 +149,21 @@ def main():
         for data in test_loader:
             images = data[0].to(device, non_blocking=True)
 
-            col_axes[2].imshow(output_np)
             noisy_imgs = add_gaussian_noise(images, sigma=1)
             output = model(noisy_imgs)
-            output = output.view(len(images), 1, IMAGE_SIZE, IMAGE_SIZE)
+            output = output.view(len(images), NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE)
             output = output.detach().cpu()
 
-            images = images.numpy().squeeze()
-            output = output.numpy().squeeze()
-            ssim_val = ssim(images, output, data_range=1.0)
+            images = images.cpu().numpy().squeeze()
+            output = output.cpu().numpy().squeeze()
+            
+            img1 = images[0]   # grab the first (and only) image
+            img2 = output[0]   # grab the first (and only) output
+
+            if NUM_CHANNELS == 3:
+                ssim_val = ssim(img1, img2, data_range=1.0, channel_axis=0)
+            else:
+                ssim_val = ssim(img1, img2, data_range=1.0)
 
     print("SSIM: ", ssim_val)
 
