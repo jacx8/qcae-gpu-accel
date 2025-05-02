@@ -60,7 +60,7 @@ def main():
                 optimizer.step()
                 train_loss += loss.item() * images.size(0)
 
-                outputs = outputs.detach().view(len(images), 1, IMAGE_SIZE, IMAGE_SIZE)
+                outputs = outputs.detach().view(len(images), NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE)
                 batch_avg_psnr = 0
                 for i in range(len(images)):
                     #org = np.transpose(images[i], (1, 2, 0)).detach().numpy()
@@ -110,12 +110,28 @@ def main():
             noisy_imgs = add_gaussian_noise(images, 0.25)
             output = model(noisy_imgs)
 
-            output = output.view(1, 1, IMAGE_SIZE, IMAGE_SIZE)
-            #output_np = output.cpu().detach().numpy()
+            output = output.view(1, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE)
             
             images_np = images.squeeze().cpu().numpy()
             noisy_imgs_np = noisy_imgs.squeeze().cpu().numpy()
             output_np = output.squeeze().cpu().numpy()
+
+            if NUM_CHANNELS == 3:                                                                                                                                                                       
+                images_np = np.transpose(images_np, (1, 2, 0))
+                noisy_imgs_np = np.transpose(noisy_imgs_np, (1, 2, 0))
+                output_np = np.transpose(output_np, (1, 2, 0))
+ 
+            # Plot
+            col_axes = axes[:, k]
+            if NUM_CHANNELS == 1:
+                col_axes[0].imshow(images_np, cmap='gist_gray')        # Original
+                col_axes[1].imshow(noisy_imgs_np, cmap='gist_gray')     # Noisy
+                col_axes[2].imshow(output_np, cmap='gist_gray')         # Output
+            else:
+                col_axes[0].imshow(images_np)        # Original
+                col_axes[1].imshow(noisy_imgs_np)     # Noisy
+                col_axes[2].imshow(output_np)         # Output
+
 
             col_axes = axes[:, k]
             #col_axes[0].imshow(np.squeeze(images), cmap='gist_gray')
@@ -127,26 +143,6 @@ def main():
 
         plt.savefig('denoised_inputs.png', dpi=400)
 
-    # avg_psnr = 0
-    # test_size = 0
-
-    # for data in test_loader:
-    #     images = data[0]
-    #     noisy_imgs = add_gaussian_noise(images, 0.5)
-    #     outputs = model(noisy_imgs)
-    #     outputs = outputs.detach().view(len(images), 1, 28, 28)
-    #     batch_avg_psnr = 0
-    #     for i in range(len(images)):
-    #         org = np.transpose(images[i], (1, 2, 0)).numpy()
-    #         denoise = np.transpose(outputs[i], (1, 2, 0)).numpy()
-    #         batch_avg_psnr += psnr(org, denoise)
-    #     avg_psnr += batch_avg_psnr
-    #     test_size += len(images)
-    # print(
-    #     "On Test data of {} examples:\nAverage PSNR: {:.3f}".format(
-    #         test_size, avg_psnr / test_size
-    #     )
-    # )
 
     model.eval()
     with torch.no_grad():
@@ -158,10 +154,7 @@ def main():
             output = model(noisy_imgs)
             output = output.view(len(images), 1, IMAGE_SIZE, IMAGE_SIZE)
             output = output.detach().cpu()
-            # for i in range(len(images)):
-            #     org = images[i].numpy().squeeze()
-            #     denoise = output[i].numpy().squeeze()
-            #     ssim_val = ssim(org, denoise, full=True, data_range=data_range)
+
             images = images.numpy().squeeze()
             output = output.numpy().squeeze()
             ssim_val = ssim(images, output, data_range=1.0)

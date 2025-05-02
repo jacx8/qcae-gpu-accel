@@ -1,10 +1,11 @@
 NUM_QUBITS = 2
-NUM_CIRCUITS = 6
+NUM_CIRCUITS = 3
 SIMULATOR = 'qasm_simulator'
 NUM_SHOTS = 1000
 SHIFT = 0.9
 LR = 0.001
 IMAGE_SIZE = 32
+NUM_CHANNELS = 3
 
 import torch
 

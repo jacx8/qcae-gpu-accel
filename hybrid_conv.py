@@ -85,7 +85,7 @@ class ConvDenoiseNet(nn.Module):
         super(ConvDenoiseNet, self).__init__()
         n_filters = 32
         ## encoder layers ##
-        self.conv1 = nn.Conv2d(1, n_filters, 3, padding=1)
+        self.conv1 = nn.Conv2d(NUM_CHANNELS, n_filters, 3, padding=1)
         self.conv2 = nn.Conv2d(n_filters, 4, 3, padding=1)
         self.conv3 = nn.Conv2d(4, 4, 3, padding=1)
         self.pool = nn.MaxPool2d(2, 2)
@@ -97,8 +97,8 @@ class ConvDenoiseNet(nn.Module):
         ## decoder layers ##
         # NOTE: adjust ContT padding for correct expected output size
         self.t_conv0 = nn.ConvTranspose2d(  4,  4, kernel_size=4, stride=2, padding=1, output_padding=0)
-        self.t_conv1 = nn.ConvTranspose2d(  4, 32, kernel_size=4, stride=2, padding=1, output_padding=0)
-        self.t_conv2 = nn.ConvTranspose2d( 32,  1, kernel_size=4, stride=2, padding=1, output_padding=0)
+        self.t_conv1 = nn.ConvTranspose2d(  4, n_filters, kernel_size=4, stride=2, padding=1, output_padding=0)
+        self.t_conv2 = nn.ConvTranspose2d( n_filters,  NUM_CHANNELS, kernel_size=4, stride=2, padding=1, output_padding=0)
 
 
     def forward(self, x):
