@@ -16,7 +16,6 @@ from add_noise import add_gaussian_noise
 import argparse
 
 from qiskit_ibm_provider import IBMProvider
-from qiskit import Aer, IBMQ
 
 from skimage.metrics import structural_similarity as ssim
 
@@ -108,7 +107,7 @@ def main():
         for k in range(ncols):
             images, labels = next(dataiter)
             images     = images.to(device, non_blocking=True)
-            noisy_imgs = add_gaussian_noise(images, 0.001)
+            noisy_imgs = add_gaussian_noise(images, 0.25)
             output = model(noisy_imgs)
 
             output = output.view(1, 1, 28, 28)

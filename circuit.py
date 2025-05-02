@@ -1,20 +1,19 @@
-import torch
+import torch                                                                                                                                                                                                                                                                                                                                         
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-from qiskit import execute
 from qiskit.circuit import Parameter, QuantumCircuit
-from qiskit import Aer, IBMQ
+from qiskit_aer import AerSimulator
 import qiskit
 
 from qiskit_ibm_provider import IBMProvider
 
 from constant import *
 
-from qiskit.providers.aer.noise import NoiseModel
+#from qiskit.providers.aer.noise import NoiseModel
 
 
-IBMProvider.save_account(token="YOUR_TOKEN", overwrite=True)
+#IBMProvider.save_account(token="YOUR_TOKEN", overwrite=True)
 #provider = IBMQ.load_account()
 
 class QuantumLayer(QuantumCircuit):
@@ -24,7 +23,7 @@ class QuantumLayer(QuantumCircuit):
         self.shots = shots
 
        # self.backend = Aer.get_backend(backend_name)
-        self.backend = Aer.get_backend('qasm_simulator', device="GPU")
+        self.backend = AerSimulator(method='statevector', device='GPU')
         # Adding noise model to the backend
         # bknoise = provider.get_backend('ibmq_mumbai')
         # self.noise_model = NoiseModel.from_backend(bknoise)
@@ -59,14 +58,25 @@ class QuantumLayer(QuantumCircuit):
         return self.circuit
 
     def run(self, i):
-        self.bind(i)
-        job = execute(
+        #self.bind(i)
+        #job = self.backend.run(
+        #    self.circuit,
+        #    shots=self.shots,
+        #    # noise_model=self.noise_model,
+        #    # basis_gates=self.basis_gates, # Uncomment these 2 lines to add noise model
+        #)
+
+
+        # Instead of mutating the circuit, pass binds explicitly:
+        beta_val, gamma_val = float(i[0]), float(i[1])
+        binds = [{ self.beta: [beta_val], self.gamma: [gamma_val] }]
+        job = self.backend.run(
             self.circuit,
-            self.backend,
             shots=self.shots,
-            # noise_model=self.noise_model,
-            # basis_gates=self.basis_gates, # Uncomment these 2 lines to add noise model
+            parameter_binds=binds
         )
+
         result = job.result()
         counts = result.get_counts(self.circuit)
         return self.energy_expectation(counts, self.shots, 0, 1)
+
