@@ -60,7 +60,7 @@ def main():
                 optimizer.step()
                 train_loss += loss.item() * images.size(0)
 
-                outputs = outputs.detach().view(len(images), 1, 28, 28)
+                outputs = outputs.detach().view(len(images), 1, IMAGE_SIZE, IMAGE_SIZE)
                 batch_avg_psnr = 0
                 for i in range(len(images)):
                     #org = np.transpose(images[i], (1, 2, 0)).detach().numpy()
@@ -110,7 +110,7 @@ def main():
             noisy_imgs = add_gaussian_noise(images, 0.25)
             output = model(noisy_imgs)
 
-            output = output.view(1, 1, 28, 28)
+            output = output.view(1, 1, IMAGE_SIZE, IMAGE_SIZE)
             #output_np = output.cpu().detach().numpy()
             
             images_np = images.squeeze().cpu().numpy()
@@ -156,7 +156,7 @@ def main():
             col_axes[2].imshow(output_np)
             noisy_imgs = add_gaussian_noise(images, sigma=1)
             output = model(noisy_imgs)
-            output = output.view(len(images), 1, 28, 28)
+            output = output.view(len(images), 1, IMAGE_SIZE, IMAGE_SIZE)
             output = output.detach().cpu()
             # for i in range(len(images)):
             #     org = images[i].numpy().squeeze()
