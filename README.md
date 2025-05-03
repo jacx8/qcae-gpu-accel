@@ -1,5 +1,7 @@
 # Quantum Autoencoder for Image Denoising
 
+![Image output showing the QCAE denoising larger color images depicting complex scenes](https://github.com/jacx8/qcae-gpu-accel/blob/main/denoised_inputs.png)
+
 ## Introduction
 This is an implementation of a quantum autoencoder for image denoising. The autoencoder is trained on a set of images with added noise. The autoencoder is then used to denoise the same set of images.
 
