@@ -39,7 +39,7 @@ def main():
         model = model.to(device)
         
         criterion = nn.MSELoss()
-        optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+        optimizer = torch.optim.Adam(model.parameters(), lr=0.003)
 
         # number of epochs to train the model
         n_epochs = 300

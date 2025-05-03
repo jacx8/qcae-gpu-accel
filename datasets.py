@@ -4,6 +4,7 @@ from torchvision.datasets import MNIST, FashionMNIST, CIFAR10
 from torchvision import transforms
 from constant import *
 
+# CIFAR 10
 def train_dataset(n_samples = 20, batch_size = 1):
     if NUM_CHANNELS ==1:
         X_train = CIFAR10(root='./data', train=True, download=True, transform=transforms.Compose([transforms.Resize((IMAGE_SIZE,IMAGE_SIZE)),transforms.Grayscale(num_output_channels=1),transforms.ToTensor()]))
@@ -43,7 +44,7 @@ def train_dataset(n_samples = 20, batch_size = 1):
     return train_loader
 
 
-
+# CIFAR 10
 def test_dataset(n_samples = 20, batch_size = 1):
     if NUM_CHANNELS==1:
         X_test = CIFAR10(root='./data', train=False, download=True, transform=transforms.Compose([transforms.Resize((IMAGE_SIZE,IMAGE_SIZE)),transforms.Grayscale(num_output_channels=1),transforms.ToTensor()]))
@@ -69,6 +70,7 @@ def test_dataset(n_samples = 20, batch_size = 1):
     test_loader = torch.utils.data.DataLoader(X_test, batch_size=batch_size, shuffle=False)
     return test_loader
 
+# MNIST
 #def train_dataset(n_samples = 200, batch_size = 1):
 #    X_train = MNIST(root='./data', train=True, download=True, transform=transforms.Compose([transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),transforms.ToTensor()]))
 #
@@ -84,7 +86,8 @@ def test_dataset(n_samples = 20, batch_size = 1):
 #    train_loader = torch.utils.data.DataLoader(X_train, batch_size=batch_size, shuffle=False, pin_memory=True)
 #    return train_loader
 #
-#
+
+# MNIST
 #def test_dataset(n_samples = 200, batch_size = 1):
 #    X_test = MNIST(root='./data', train=False, download=True, transform=transforms.Compose([transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),transforms.ToTensor()]))
 #
@@ -98,10 +101,11 @@ def test_dataset(n_samples = 20, batch_size = 1):
 #
 #    test_loader = torch.utils.data.DataLoader(X_test, batch_size=batch_size, shuffle=False)
 #    return test_loader
+#
 
-
+# Fashion MNIST
 #def train_dataset(n_samples = 200, batch_size = 1):
-#    X_train = FashionMNIST(root='./data', train=True, download=True, transform=transforms.Compose([transforms.ToTensor()]))
+#    X_train = FashionMNIST(root='./data', train=True, download=True, transform=transforms.Compose([transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),transforms.ToTensor()]))
 #
 #    # # Leaving only labels 0 and 1 
 #    idx = np.where(X_train.targets == 0)[0][:n_samples]
@@ -113,10 +117,10 @@ def test_dataset(n_samples = 20, batch_size = 1):
 #
 #    train_loader = torch.utils.data.DataLoader(X_train, batch_size=batch_size, shuffle=False, pin_memory=True)
 #    return train_loader
-#
-#
+
+# Fashion MNIST
 #def test_dataset(n_samples = 200, batch_size = 1):
-#    X_test = FashionMNIST(root='./data', train=False, download=True, transform=transforms.Compose([transforms.ToTensor()]))
+#    X_test = FashionMNIST(root='./data', train=False, download=True, transform=transforms.Compose([transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),transforms.ToTensor()]))
 #
 #    idx = np.where(X_test.targets == 0)[0][:n_samples]
 #    # idx = np.stack([np.where(X_test.targets == i)[0][:n_samples] for i in range(10)], axis=1)
