@@ -26,7 +26,7 @@ salloc --nodes 1 --ntasks-per-node 1 --cpus-per-task 2 --mem 8G --time 03:00:00 
 module load anaconda3
 conda create -n qcae_env python=3.10.16
 source activate qcae_env
-pip install -r requirements.text
+pip install -r requirements.txt
 python3 -W "ignore" main.py
 ```
 
