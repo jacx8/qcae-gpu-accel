@@ -40,3 +40,6 @@ python3 -W "ignore" main.py
 python3 -W "ignore" main.py --test
 ```
 
+### Datasets ###
+There are three different datasets (CIFAR-10, MNIST, Fashion MNIST) contained in ``datasets.py``. To change the dataset, uncomment the pair of functions associated with the desired dataset. If using MNIST or Fashion MNIST, you must set the ``NUM_CHANNELS`` constant in ``constant.py`` from ``3`` to ``1`` to support grayscale images. CIFAR-10 works with both settings.
+
