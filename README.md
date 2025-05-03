@@ -1,7 +1,6 @@
 # Extended Quantum Autoencoder for Image Denoising
 
 ![Image output showing the QCAE denoising larger color images depicting complex scenes](https://github.com/jacx8/qcae-gpu-accel/blob/main/denoised_inputs.png)
-![Image output showing the QCAE loss for the above output](https://github.com/jacx8/qcae-gpu-accel/blob/main/losses.png)
 
 ## Introduction
 This is an implementation of a quantum autoencoder for image denoising. The autoencoder is trained on a set of images with added noise. The autoencoder is then used to denoise the same set of images. This repository builds upon the work of [Kea et al.](https://arxiv.org/pdf/2401.06367). The maintainers of this repository chose to extend their work as their final project for their graduate quantum computing class. Our extensions include adding support for larger image sizes, color images, and enabling GPU acceleration for faster encoding, decoding, and simulation times. The focus of our work was to assess the potential for this model to outperform classical convolutional autoencoders in practical real-world image denoising tasks. Toward this end, we tested the model with Fashion MNIST and CIFAR-10 datasets after augmenting the model with the appropriate extensions.
